@@ -21,8 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import mx.com.practica.fotogramach.R
 import mx.com.practica.fotogramach.api.ApiResponseStatus
-import mx.com.practica.fotogramach.composable.AuthField
-import mx.com.practica.fotogramach.composable.LoadingWheel
+import mx.com.practica.fotogramach.composables.AuthField
+import mx.com.practica.fotogramach.composables.ErrorDialog
+import mx.com.practica.fotogramach.composables.LoadingWheel
 import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.viewmodels.AuthViewModel
 
@@ -30,6 +31,7 @@ import mx.com.practica.fotogramach.viewmodels.AuthViewModel
 fun LoginScreen(
     status: ApiResponseStatus<User>?,
     onLoginButtonClick: (String, String) -> Unit,
+    onErrorDialogDismiss: () -> Unit,
     authViewModel: AuthViewModel
 ) {
     Box(
@@ -37,7 +39,7 @@ fun LoginScreen(
             .fillMaxSize()
 //            .background(colorResource(id = R.color.secondary_background))
             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.Center
     ) {
         LoginInformation(
             onLoginButtonClick = onLoginButtonClick,
@@ -47,9 +49,7 @@ fun LoginScreen(
         if (status is ApiResponseStatus.Loading) {
             LoadingWheel()
         } else if (status is ApiResponseStatus.Error) {
-//            ErrorDialog(status.messageId, onErrorDialogDismiss)
-
-            Log.e("miTag->","error")
+            ErrorDialog(status.messageId, onErrorDialogDismiss)
         }
     }
 }
@@ -73,6 +73,7 @@ fun LoginInformation(
                 bottom = 16.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
         AuthField(
             label = stringResource(id = R.string.user),

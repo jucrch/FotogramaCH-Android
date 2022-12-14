@@ -1,4 +1,4 @@
-package mx.com.practica.fotogramach.composable
+package mx.com.practica.fotogramach.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

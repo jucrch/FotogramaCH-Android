@@ -29,7 +29,7 @@ class AuthViewModel : ViewModel() {
             }
             else -> {
                 status.value = ApiResponseStatus.Loading()
-                
+
             }
         }
     }
@@ -37,5 +37,9 @@ class AuthViewModel : ViewModel() {
     fun resetErrors() {
         userError.value = null
         passwordError.value = null
+    }
+
+    fun resetApiResponseStatus() {
+        status.value = null
     }
 }

@@ -1,4 +1,4 @@
-package mx.com.practica.fotogramach.composable
+package mx.com.practica.fotogramach.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import mx.com.practica.fotogramach.R
 
 @Composable
 fun LoadingWheel() {
@@ -20,7 +21,7 @@ fun LoadingWheel() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = Color(android.graphics.Color.RED)
+            color = Color(R.color.colorAccent)
         )
     }
 }

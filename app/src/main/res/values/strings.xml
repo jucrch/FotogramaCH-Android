@@ -15,4 +15,6 @@
     <string name="text_empty"></string>
     <string name="user_is_not_valid">Usuario no valido</string>
     <string name="password_is_not_valid">Password no valido</string>
+    <string name="error_dialog_title">Oops, something happened!</string>
+    <string name="try_again">Try again</string>
 </resources>

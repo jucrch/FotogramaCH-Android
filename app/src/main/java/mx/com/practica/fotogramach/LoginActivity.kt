@@ -19,8 +19,14 @@ class LoginActivity : ComponentActivity() {
                 LoginScreen(
                     status = viewModel.status.value,
                     authViewModel = viewModel,
-                    onLoginButtonClick = { email, password -> viewModel.login(email, password) })
+                    onLoginButtonClick = { email, password -> viewModel.login(email, password) },
+                    onErrorDialogDismiss = ::resetApiResponseStatus
+                )
             }
         }
+    }
+
+    private fun resetApiResponseStatus() {
+        viewModel.resetApiResponseStatus()
     }
 }
