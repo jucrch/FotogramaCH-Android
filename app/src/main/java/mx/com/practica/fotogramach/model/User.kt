@@ -4,37 +4,41 @@ import android.app.Activity
 import android.content.Context
 
 class User(
-    val id: Long,
-    val email: String,
-    val authenticationToken: String,
+    val _scid: String,
+    val nombre: String,
+    val apPaterno: String,
+    val apMaterno: String,
 ) {
     companion object {
 
         private const val AUTH_PREFS = "auth_prefs"
-        private const val ID_KEY = "id"
-        private const val EMAIL_KEY = "usuario"
-        private const val AUTH_TOKEN_KEY = "auth_token"
+        private const val ID_KEY = "scid"
+        private const val USER_KEY = "usuario"
+        private const val AP_PATERNO_KEY = "apPaterno"
+        private const val AP_MATERNO_KEY = "apMaterno"
 
         fun setLoggedInUser(activity: Activity, user: User) {
             activity.getSharedPreferences(AUTH_PREFS, Context.MODE_PRIVATE).also {
                 it.edit()
-                    .putLong(ID_KEY, user.id)
-                    .putString(EMAIL_KEY, user.email)
-                    .putString(AUTH_TOKEN_KEY, user.authenticationToken).apply()
+                    .putString(ID_KEY, user._scid)
+                    .putString(USER_KEY, user.nombre)
+                    .putString(AP_PATERNO_KEY, user.apPaterno)
+                    .putString(AP_MATERNO_KEY, user.apMaterno).apply()
             }
         }
 
         fun getLoggerInUser(activity: Activity): User? {
             val prefs =
                 activity.getSharedPreferences(AUTH_PREFS, Context.MODE_PRIVATE) ?: return null
-            val userId = prefs.getLong(ID_KEY, 0)
-            if (userId == 0L) {
+            val userId = prefs.getString(ID_KEY, "")
+            if (userId!!.isEmpty()) {
                 return null
             }
             return User(
-                userId,
-                prefs.getString(EMAIL_KEY, "") ?: "",
-                prefs.getString(AUTH_TOKEN_KEY, "") ?: ""
+                prefs.getString(ID_KEY, "") ?: "",
+                prefs.getString(USER_KEY, "") ?: "",
+                prefs.getString(AP_PATERNO_KEY, "") ?: "",
+                prefs.getString(AP_MATERNO_KEY, "") ?: ""
             )
         }
 

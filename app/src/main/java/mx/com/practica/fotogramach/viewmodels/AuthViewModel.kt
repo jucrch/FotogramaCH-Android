@@ -2,9 +2,12 @@ package mx.com.practica.fotogramach.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import mx.com.practica.fotogramach.R
 import mx.com.practica.fotogramach.api.ApiResponseStatus
 import mx.com.practica.fotogramach.model.User
+import mx.com.practica.fotogramach.repository.AuthRepository
+import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
@@ -19,6 +22,10 @@ class AuthViewModel : ViewModel() {
     var passwordError = mutableStateOf<Int?>(null)
         private set
 
+    init {
+
+    }
+
     fun login(user: String, password: String) {
         when {
             user.isEmpty() -> {
@@ -29,14 +36,25 @@ class AuthViewModel : ViewModel() {
             }
             else -> {
                 status.value = ApiResponseStatus.Loading()
-
+                viewModelScope.launch {
+                    handleResponseStatus(authRepository.login(user, password))
+                }
             }
         }
     }
 
+    private val authRepository = AuthRepository()
+
     fun resetErrors() {
         userError.value = null
         passwordError.value = null
+    }
+
+    private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<User>) {
+        if (apiResponseStatus is ApiResponseStatus.Success) {
+            user.value = apiResponseStatus.data!!
+        }
+        status.value = apiResponseStatus
     }
 
     fun resetApiResponseStatus() {
