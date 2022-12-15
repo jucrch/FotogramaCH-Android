@@ -1,7 +1,7 @@
 package mx.com.practica.fotogramach.repository
 
 import mx.com.practica.fotogramach.api.ApiResponseStatus
-import mx.com.practica.fotogramach.api.FotogramaApi
+import mx.com.practica.fotogramach.api.ApiService
 import mx.com.practica.fotogramach.api.dto.Json
 import mx.com.practica.fotogramach.api.dto.UserDTOMapper
 import mx.com.practica.fotogramach.api.makeNetworkCall
@@ -10,11 +10,21 @@ import mx.com.practica.fotogramach.security.AESEnDecryption
 import mx.com.practica.fotogramach.utils.ivStr
 import mx.com.practica.fotogramach.utils.keyStr
 import org.json.JSONObject
+import javax.inject.Inject
 
 
-class AuthRepository {
-
+interface AuthTask {
     suspend fun login(
+        user: String,
+        password: String,
+    ): ApiResponseStatus<User>
+}
+
+class AuthRepository @Inject constructor(
+    private val apiService: ApiService,
+) : AuthTask {
+
+    override suspend fun login(
         user: String,
         password: String,
     ): ApiResponseStatus<User> = makeNetworkCall {
@@ -29,7 +39,7 @@ class AuthRepository {
             obj.toString()
         )
         val json = Json(ansBase64!!.replace("\n", ""))
-        val loginApiResponse = FotogramaApi.retrofitService.login(json)
+        val loginApiResponse = apiService.login(json)
         if (loginApiResponse.isSuccess == 0) {
             throw java.lang.Exception(loginApiResponse.message)
         }

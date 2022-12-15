@@ -101,7 +101,7 @@ fun DeptosGridItem(
                     .fillMaxSize()
                     .padding(8.dp),
                 textAlign = TextAlign.Center,
-                fontSize = 12.sp,
+                fontSize = 8.sp,
             )
         }
     }

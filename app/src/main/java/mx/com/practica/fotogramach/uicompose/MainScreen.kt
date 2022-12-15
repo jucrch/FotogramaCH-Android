@@ -3,24 +3,29 @@ package mx.com.practica.fotogramach.uicompose
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 import mx.com.practica.fotogramach.AuthNavDestinations.DeptosScreenDestination
 import mx.com.practica.fotogramach.AuthNavDestinations.MainScreenDestination
 import mx.com.practica.fotogramach.AuthNavDestinations.PasillosScreenDestination
 import mx.com.practica.fotogramach.model.Depto
 import mx.com.practica.fotogramach.model.TiendasAsignadas
+import mx.com.practica.fotogramach.viewmodels.TiendasViewModel
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun MainScreen(
+    tiendasViewModel: TiendasViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
     AuthNavHost(
-        navController = navController,
+        navController = navController, tiendasViewModel = tiendasViewModel
     )
 }
 
@@ -29,6 +34,7 @@ fun MainScreen(
 @Composable
 private fun AuthNavHost(
     navController: NavHostController,
+    tiendasViewModel: TiendasViewModel
 ) {
     NavHost(
         navController = navController,
@@ -41,15 +47,7 @@ private fun AuthNavHost(
                         route = DeptosScreenDestination,
                     )
                 },
-                tiendasAsignadasList = listOf(
-                    TiendasAsignadas(
-                        1001, "Chederaui"
-                    ),
-                    TiendasAsignadas(
-                        1002, "AGO"
-                    ),
-                ),
-//                authViewModel = authViewModel,
+                tiendasViewModel = tiendasViewModel,
 //                onTiendaSelect = onTiendaSelect,
             )
         }

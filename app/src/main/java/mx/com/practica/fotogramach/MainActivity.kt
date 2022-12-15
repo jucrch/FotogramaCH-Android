@@ -4,26 +4,32 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import dagger.hilt.android.AndroidEntryPoint
+import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.theme.FotogramaCHTheme
 import mx.com.practica.fotogramach.uicompose.MainScreen
+import mx.com.practica.fotogramach.viewmodels.TiendasViewModel
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val tiendasViewModel: TiendasViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val user = User.getLoggerInUser(this)
+        if (user == null) {
+            openLoginActivity()
+            return
+        }
+
+        tiendasViewModel.getTiendasAsigColletion(user._scid)
         setContent {
-//            val user = viewModel.user
-//            val userValuer = user.value
-//            if (userValuer != null) {
-//                User.setLoggedInUser(this, userValuer)
-//                startActivityMain()
-//            }
-//            val status = viewModel.status
             FotogramaCHTheme {
                 MainScreen(
 //                    onTiendaSelect = { openLoginActivity() }

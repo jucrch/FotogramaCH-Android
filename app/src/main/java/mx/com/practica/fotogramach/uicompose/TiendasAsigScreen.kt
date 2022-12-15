@@ -1,6 +1,5 @@
 package mx.com.practica.fotogramach.uicompose
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,21 +23,28 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import mx.com.practica.fotogramach.R
+import mx.com.practica.fotogramach.api.ApiResponseStatus
 import mx.com.practica.fotogramach.composables.BackNavigationIcon
+import mx.com.practica.fotogramach.composables.ErrorDialog
+import mx.com.practica.fotogramach.composables.LoadingWheel
 import mx.com.practica.fotogramach.model.TiendasAsignadas
+import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.utils.GRID_SPAN_COUNT
+import mx.com.practica.fotogramach.viewmodels.TiendasViewModel
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun TiendasAsigScreen(
-    tiendasAsignadasList: List<TiendasAsignadas>,
     onTiendaSelect: (TiendasAsignadas) -> Unit,
+    tiendasViewModel: TiendasViewModel
 ) {
+    val status = tiendasViewModel.status.value
+    val tiendasList = tiendasViewModel.tiendasList.value
+
     Scaffold(topBar = { BackNavigationIcon() }) {
         Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Tiendas asignadas",
@@ -51,18 +58,21 @@ fun TiendasAsigScreen(
             )
             Divider(
                 modifier = Modifier.padding(
-                    top = 1.dp,
-                    start = 8.dp,
-                    end = 8.dp,
-                    bottom = 16.dp
+                    top = 1.dp, start = 8.dp, end = 8.dp, bottom = 16.dp
                 ), color = colorResource(id = R.color.divider), thickness = 1.dp
             )
             LazyVerticalGrid(cells = GridCells.Fixed(GRID_SPAN_COUNT), content = {
-                items(tiendasAsignadasList) {
+                items(tiendasList) {
                     TiendasAsignadasGridItem(tiendasAsignadas = it, onTiendaSelect = onTiendaSelect)
                 }
             })
         }
+    }
+    if (status is ApiResponseStatus.Loading) {
+        LoadingWheel()
+    } else if (status is ApiResponseStatus.Error) {
+//        ErrorDialog(status.messageId, onErrorDialogDismiss)
+        ErrorDialog(status.messageId) { tiendasViewModel.resetApiResponseStatus() }
     }
 }
 
@@ -70,23 +80,22 @@ fun TiendasAsigScreen(
 @ExperimentalMaterialApi
 @Composable
 fun TiendasAsignadasGridItem(
-    tiendasAsignadas: TiendasAsignadas,
-    onTiendaSelect: (TiendasAsignadas) -> Unit
+    tiendasAsignadas: TiendasAsignadas, onTiendaSelect: (TiendasAsignadas) -> Unit
 ) {
     Surface(
         modifier = Modifier
             .padding(8.dp)
-            .height(100.dp)
+            .height(IntrinsicSize.Min)
+            .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
             .width(100.dp),
         onClick = { onTiendaSelect(tiendasAsignadas) },
         shape = RoundedCornerShape(4.dp)
     ) {
         Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = rememberImagePainter(R.drawable.ic_tiendaasignada),
+                painter = painterResource(R.drawable.ic_tiendaasignada),
                 contentDescription = null,
                 modifier = Modifier
                     .background(Color.White)
@@ -97,9 +106,9 @@ fun TiendasAsignadasGridItem(
                 color = Color.Black,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp),
+                    .padding(top = 0.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
                 textAlign = TextAlign.Center,
-                fontSize = 12.sp,
+                fontSize = 8.sp,
             )
         }
     }
@@ -110,17 +119,20 @@ fun TiendasAsignadasGridItem(
 @ExperimentalFoundationApi
 @Preview
 @Composable
-fun TiendasAsgScreenPreview() {
+fun TiendasAsignadasGridItemPreview() {
+    val tiendasAsignadas = TiendasAsignadas(1, "Chedrau asdaskjh sadkkjhsd")
+    TiendasAsignadasGridItem(tiendasAsignadas = tiendasAsignadas) {}
+}
 
-    TiendasAsigScreen(
-        tiendasAsignadasList = listOf(
-            TiendasAsignadas(
-                1001, "Chederaui"
-            ),
-            TiendasAsignadas(
-                1002, "AGO"
-            ),
-        ),
-        onTiendaSelect = { tiendasAsignadas -> Log.e("miTag", "${tiendasAsignadas.idTienda}") }
-    )
+
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+@Preview
+@Composable
+fun TiendasAsgScreenPreview() {
+//    TiendasAsigScreen(onTiendaSelect = { tiendasAsignadas ->
+//        Log.e(
+//            "miTag", "${tiendasAsignadas.idTienda}"
+//        )
+//    })
 }

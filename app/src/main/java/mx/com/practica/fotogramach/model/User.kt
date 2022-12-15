@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 
 class User(
-    val _scid: String,
+    val _scid: String ="",
     val nombre: String,
     val apPaterno: String,
     val apMaterno: String,

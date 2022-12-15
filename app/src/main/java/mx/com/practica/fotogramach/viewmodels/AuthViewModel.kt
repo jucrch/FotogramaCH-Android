@@ -3,13 +3,18 @@ package mx.com.practica.fotogramach.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import mx.com.practica.fotogramach.R
 import mx.com.practica.fotogramach.api.ApiResponseStatus
 import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.repository.AuthRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     var user = mutableStateOf<User?>(null)
         private set
@@ -42,8 +47,6 @@ class AuthViewModel : ViewModel() {
             }
         }
     }
-
-    private val authRepository = AuthRepository()
 
     fun resetErrors() {
         userError.value = null

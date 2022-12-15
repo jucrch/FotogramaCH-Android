@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import dagger.hilt.android.AndroidEntryPoint
 import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.theme.FotogramaCHTheme
 import mx.com.practica.fotogramach.uicompose.LoginScreen
@@ -14,6 +15,7 @@ import mx.com.practica.fotogramach.viewmodels.AuthViewModel
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
+@AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
 
     private val viewModel: AuthViewModel by viewModels()
