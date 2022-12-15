@@ -5,12 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import mx.com.practica.fotogramach.model.User
 import mx.com.practica.fotogramach.theme.FotogramaCHTheme
 import mx.com.practica.fotogramach.uicompose.LoginScreen
 import mx.com.practica.fotogramach.viewmodels.AuthViewModel
 
+@ExperimentalFoundationApi
+@ExperimentalMaterialApi
 class LoginActivity : ComponentActivity() {
 
     private val viewModel: AuthViewModel by viewModels()
@@ -29,17 +32,20 @@ class LoginActivity : ComponentActivity() {
                 LoginScreen(
                     status = viewModel.status.value,
                     authViewModel = viewModel,
-                    onLoginButtonClick = { user, password -> viewModel.login(
-                        user = user,
-                        password = password
-                    ) },
+                    onLoginButtonClick = { user, password ->
+                        viewModel.login(
+                            user = user,
+                            password = password
+                        )
+                    },
                     onErrorDialogDismiss = ::resetApiResponseStatus
                 )
             }
         }
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @ExperimentalFoundationApi
+    @ExperimentalMaterialApi
     private fun startActivityMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()

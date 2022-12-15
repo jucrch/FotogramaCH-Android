@@ -2,28 +2,33 @@ package mx.com.practica.fotogramach
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import mx.com.practica.fotogramach.api.ApiServiceInterceptor
-import mx.com.practica.fotogramach.databinding.ActivityMainBinding
-import mx.com.practica.fotogramach.model.User
+import mx.com.practica.fotogramach.theme.FotogramaCHTheme
+import mx.com.practica.fotogramach.uicompose.MainScreen
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
+//@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val user = User.getLoggerInUser(this)
-        if (user == null) {
-            openLoginActivity()
-            return
-        } else {
-            //Es para color el header de autentification
-            ApiServiceInterceptor.setSessionToken(user._scid)
+        setContent {
+//            val user = viewModel.user
+//            val userValuer = user.value
+//            if (userValuer != null) {
+//                User.setLoggedInUser(this, userValuer)
+//                startActivityMain()
+//            }
+//            val status = viewModel.status
+            FotogramaCHTheme {
+                MainScreen(
+//                    onTiendaSelect = { openLoginActivity() }
+                )
+            }
         }
     }
 
